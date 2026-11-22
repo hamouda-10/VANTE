@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vante — Craft in Motion</title>
+  <meta name="description" content="A studio portfolio where a ribbon of live video work sweeps through space, then lands in a grid.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+  <style>
+/* === VERBATIM CSS FROM SECTION 9 === */
+:root{--bg:#0a0a0b;--ink:#f4f1ea;--mid:#8d8b86;--line:rgba(244,241,234,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{font-family:'Inter Tight',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#track{height:900vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
+.hl{position:absolute;left:0;right:0;font-weight:400;font-size:clamp(40px,6.7vw,130px);line-height:1;letter-spacing:-.055em;white-space:nowrap;text-align:center;will-change:transform}
+#l1{top:calc(50% - .98em)}
+#l2{top:calc(50% + .03em)}
+#l1 span,#l2 span{display:inline-block}
+#l1 span{margin-right:15vw}
+#l2 span{margin-left:15vw}
+#cap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:15em;text-align:center;font-size:clamp(9px,.74vw,13px);font-weight:500;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;color:var(--ink)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.top{position:absolute;left:32px;right:32px;top:26px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.top{justify-content:flex-start}.acts{margin-left:auto}
+#pager{display:flex;margin:-26px 0 0 28px;pointer-events:auto}
+#pager span{display:grid;place-items:center;width:44px;height:50px;border:1px solid var(--line);border-top:0;margin-left:-1px;font:400 11px 'IBM Plex Mono',monospace;color:var(--mid)}
+#glow{position:absolute;left:0;right:0;top:0;height:42%;background:linear-gradient(rgba(244,241,234,.1),rgba(244,241,234,0))}
+#cross{position:absolute;left:32px;right:32px;top:37.5%;height:1px;background:var(--line)}
+#cross i{position:absolute;left:50%;top:-.62em;margin-left:-.3em;font:400 13px 'IBM Plex Mono',monospace;color:var(--mid);background:var(--bg);padding:0 .3em;line-height:1.2}
+.logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:600;letter-spacing:.09em}
+.logo svg{width:22px;height:18px;fill:var(--ink)}
+.acts{display:flex;align-items:center;gap:7px;pointer-events:auto}
+.acts a{display:flex;align-items:center;gap:9px;height:32px;padding:0 15px;border:1px solid rgba(244,241,234,.55);border-radius:99px;color:var(--ink);text-decoration:none;font-size:12px;font-weight:500;letter-spacing:.06em;transition:background .2s,color .2s}
+.acts a:hover{background:var(--ink);color:var(--bg)}
+.acts a i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.acts a b{display:block;width:13px;height:7px;border-top:1px solid currentColor;border-bottom:1px solid currentColor}
+#hint{position:absolute;left:50%;top:33px;transform:translateX(-50%);font:400 11.5px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--ink);padding-bottom:6px;border-bottom:1px solid var(--line)}
+.bot{position:absolute;left:32px;right:32px;bottom:26px;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;font-size:12.5px;line-height:1.35;pointer-events:none}
+.bot p{color:var(--ink);max-width:21em}
+.bot .mid{font:400 11.5px 'IBM Plex Mono',monospace;letter-spacing:.06em}
+.bot .mid s{text-decoration:none;color:var(--mid);margin:0 .9em}
+.bot .r{justify-self:end;display:flex;gap:12px;align-items:center;font:400 11.5px 'IBM Plex Mono',monospace;letter-spacing:.06em}
+.bot .r:after{content:"";width:22px;height:1px;background:var(--ink)}
+#rule{position:absolute;left:3.5vw;right:3.5vw;top:50%;height:1px;background:var(--line);transform-origin:left;transform:scaleX(0)}
+#name{position:absolute;left:0;top:0;padding:6px 11px;background:var(--ink);color:var(--bg);border-radius:99px;font-size:11.5px;font-weight:600;letter-spacing:.04em;pointer-events:none;opacity:0;transition:opacity .16s;white-space:nowrap}
+@media (max-width:760px){
+  .top{left:18px;right:18px;top:18px}.bot{left:18px;right:18px;bottom:18px;grid-template-columns:1fr auto}.bot .mid{display:none}
+  #hint,#pager{display:none}.bot p{max-width:17em;font-size:11px}
+}
+
+/* === EXTENDED STUDIO, PRODUCTS & INTERACTION STYLES === */
+
+/* === HERO BACKGROUND VIDEO & AMBIENT VISUAL (BEFORE SCROLL) === */
+#hero-bg-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.35s ease-out;
+}
+#hero-bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.68) contrast(1.18) saturate(1.15);
+  transform: scale(1.04);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+#hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(10, 10, 11, 0.28) 0%, rgba(10, 10, 11, 0.68) 65%, #0a0a0b 100%),
+              linear-gradient(180deg, rgba(10, 10, 11, 0.4) 0%, transparent 35%, transparent 65%, #0a0a0b 100%);
+  pointer-events: none;
+}
+#hero-scroll-cue {
+  position: absolute;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  z-index: 5;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--mid);
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+  user-select: none;
+}
+.scroll-cue-mouse {
+  width: 18px;
+  height: 28px;
+  border: 1px solid var(--line-strong);
+  border-radius: 99px;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  background: rgba(10, 10, 11, 0.4);
+  backdrop-filter: blur(4px);
+}
+.scroll-cue-wheel {
+  width: 2px;
+  height: 6px;
+  background: var(--ink);
+  border-radius: 1px;
+  animation: wheelBounce 1.6s infinite ease-in-out;
+}
+@keyframes wheelBounce {
+  0% { transform: translateY(0); opacity: 1; }
+  60% { transform: translateY(8px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+#hero-bg-selector {
+  position: absolute;
+  bottom: 24px;
+  left: 32px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  transition: opacity 0.3s;
+  background: rgba(10, 10, 11, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+@media (max-width: 760px) {
+  #hero-bg-selector {
+    left: 18px;
+    bottom: 60px;
+  }
+}
+.bg-sel-label {
+  color: var(--mid);
+  margin-right: 4px;
+}
+.bg-sel-btn {
+  background: transparent;
+  border: none;
+  color: var(--mid);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: 3px 7px;
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+.bg-sel-btn:hover {
+  color: var(--ink);
+}
+.bg-sel-btn.active {
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+:root {
+  --line-strong: rgba(244, 241, 234, 0.28);
+  --card-bg: #101012;
+  --card-border: rgba(244, 241, 234, 0.1);
+  --accent-cyan: #5ef0d7;
+  --accent-gold: #f5b74f;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-sans: 'Inter Tight', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#floating-nav {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 10, 11, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  user-select: none;
+}
+.audio-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+.audio-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.audio-bar {
+  width: 2px;
+  height: 3px;
+  background: var(--ink);
+  transition: height 0.15s ease;
+}
+.audio-active .audio-bar:nth-child(1) { animation: barPulse 0.6s infinite ease-in-out alternate; }
+.audio-active .audio-bar:nth-child(2) { animation: barPulse 0.8s 0.2s infinite ease-in-out alternate; }
+.audio-active .audio-bar:nth-child(3) { animation: barPulse 0.5s 0.4s infinite ease-in-out alternate; }
+.audio-active .audio-bar:nth-child(4) { animation: barPulse 0.7s 0.1s infinite ease-in-out alternate; }
+@keyframes barPulse {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
+
+.scroll-top-btn {
+  background: transparent;
+  border: none;
+  color: var(--mid);
+  cursor: pointer;
+  padding-left: 8px;
+  border-left: 1px solid var(--line);
+  font-family: inherit;
+  font-size: inherit;
+  transition: color 0.2s;
+}
+.scroll-top-btn:hover {
+  color: var(--ink);
+}
+
+#site-content {
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+}
+
+.section-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 120px 32px;
+  position: relative;
+}
+@media (max-width: 760px) {
+  .section-container {
+    padding: 80px 20px;
+  }
+}
+
+.section-header {
+  margin-bottom: 64px;
+}
+.section-tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--mid);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-tag::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--ink);
+  border-radius: 50%;
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 68px);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+  max-width: 24ch;
+}
+.section-desc {
+  font-size: clamp(14px, 1.1vw, 18px);
+  color: var(--mid);
+  line-height: 1.6;
+  max-width: 58ch;
+}
+
+#quick-nav-bar {
+  border-bottom: 1px solid var(--line);
+  background: rgba(10, 10, 11, 0.95);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  backdrop-filter: blur(12px);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+}
+.quick-links {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.quick-links a {
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 4px 0;
+}
+.quick-links a:hover, .quick-links a.active {
+  color: var(--ink);
+}
+.live-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mid);
+}
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+  animation: pulseAnim 2s infinite;
+}
+@keyframes pulseAnim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--mid);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.filter-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+}
+@media (min-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.product-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s, transform 0.2s ease-out, box-shadow 0.3s;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.product-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+
+.product-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #141416;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.product-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.3s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover .product-media video {
+  opacity: 1;
+  transform: scale(1.04);
+}
+.product-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(10, 10, 11, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.product-id {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mid);
+}
+
+.product-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.product-category {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.product-title {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.product-text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--mid);
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.product-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.spec-label {
+  color: var(--mid);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.spec-val {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.product-actions {
+  display: flex;
+  gap: 8px;
+}
+.btn-primary {
+  flex: 1;
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-primary:hover {
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(244, 241, 234, 0.35);
+}
+.btn-secondary {
+  flex: 1;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-secondary:hover {
+  border-color: var(--ink);
+  background: rgba(244, 241, 234, 0.06);
+}
+
+.workbench-wrap {
+  border: 1px solid var(--line);
+  background: #0d0d0f;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  overflow: hidden;
+}
+@media (max-width: 960px) {
+  .workbench-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+.workbench-viewport {
+  position: relative;
+  height: 580px;
+  background: radial-gradient(circle at center, #17171c 0%, #0d0d0f 75%);
+  cursor: grab;
+  overflow: hidden;
+}
+.workbench-viewport:active {
+  cursor: grabbing;
+}
+#workbench-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.viewport-hint {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--mid);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  background: rgba(10, 10, 11, 0.7);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.workbench-panel {
+  border-left: 1px solid var(--line);
+  padding: 28px;
+  background: #101014;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+@media (max-width: 960px) {
+  .workbench-panel {
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+}
+.panel-block-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.range-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--line);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+.finish-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.swatch-btn {
+  height: 42px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  background-size: cover;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink);
+}
+.swatch-btn.active {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.telemetry-readout {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--mid);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.telemetry-row {
+  display: flex;
+  justify-content: space-between;
+}
+.telemetry-row span:last-child {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.manifesto-box {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 80px 0;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 60px;
+  align-items: center;
+}
+@media (max-width: 960px) {
+  .manifesto-box {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 60px 0;
+  }
+}
+.manifesto-quote {
+  font-size: clamp(24px, 3.2vw, 44px);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+.manifesto-quote em {
+  font-style: normal;
+  color: var(--mid);
+}
+
+.synth-box {
+  background: #111114;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.synth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+#synth-canvas {
+  width: 100%;
+  height: 90px;
+  background: #08080a;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: block;
+}
+.synth-pad {
+  width: 100%;
+  height: 120px;
+  background: repeating-linear-gradient(0deg, rgba(244,241,234,0.03) 0px, rgba(244,241,234,0.03) 1px, transparent 1px, transparent 12px),
+              repeating-linear-gradient(90deg, rgba(244,241,234,0.03) 0px, rgba(244,241,234,0.03) 1px, transparent 1px, transparent 12px);
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  position: relative;
+  cursor: crosshair;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--mid);
+  user-select: none;
+}
+.pad-puck {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(244, 241, 234, 0.7);
+}
+
+.experiments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.exp-card {
+  background: #0e0e11;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.25s;
+}
+.exp-card:hover {
+  border-color: var(--line-strong);
+  background: #141418;
+}
+.exp-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mid);
+  letter-spacing: 0.08em;
+}
+.exp-name {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.exp-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mid);
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: auto;
+}
+.btn-code {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+.btn-code:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.calculator-box {
+  background: #0e0e11;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+}
+@media (max-width: 960px) {
+  .calculator-box {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 32px;
+  }
+}
+.calc-left {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.calc-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.calc-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  text-transform: uppercase;
+}
+.calc-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.calc-check-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.calc-check-item:hover {
+  border-color: var(--line-strong);
+}
+.calc-check-item.selected {
+  border-color: var(--ink);
+  background: rgba(244, 241, 234, 0.05);
+}
+.calc-check-item input {
+  display: none;
+}
+.check-name {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.check-price {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mid);
+}
+
+.calc-tier-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.tier-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 12px;
+  border-radius: 4px;
+  color: var(--mid);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tier-btn.active {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: rgba(244, 241, 234, 0.06);
+}
+
+.calc-summary {
+  background: #141419;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+.summary-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--mid);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+.estimate-amount {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+}
+.summary-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mid);
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+}
+.breakdown-row span:last-child {
+  color: var(--ink);
+}
+
+.terminal-window {
+  background: #0c0c0e;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+}
+.terminal-bar {
+  background: #141417;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mid);
+}
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+.terminal-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line);
+}
+.terminal-content {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+@media (max-width: 760px) {
+  .terminal-content {
+    padding: 20px;
+  }
+}
+.term-line {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.term-prompt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-cyan);
+  letter-spacing: 0.05em;
+}
+.term-input {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px 16px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.term-input:focus {
+  border-color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+.term-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.awards-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+.awards-table th {
+  text-align: left;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  color: var(--mid);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  font-size: 10.5px;
+}
+.awards-table td {
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+.awards-table tr {
+  transition: background 0.2s;
+}
+.awards-table tr:hover {
+  background: rgba(244, 241, 234, 0.03);
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: #070708;
+  padding: 80px 32px 40px;
+  color: var(--mid);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 760px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.footer-col-title {
+  color: var(--ink);
+  font-size: 12px;
+  margin-bottom: 16px;
+  letter-spacing: 0.06em;
+}
+.footer-clock-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.clock-val {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(10, 10, 11, 0.92);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-box {
+  background: #111115;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9);
+  transform: translateY(20px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay.active .modal-box {
+  transform: translateY(0);
+}
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  background: rgba(10, 10, 11, 0.7);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.modal-close-btn:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.case-study-hero-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  display: block;
+}
+.modal-content-pad {
+  padding: 40px;
+}
+@media (max-width: 760px) {
+  .modal-content-pad {
+    padding: 24px;
+  }
+}
+
+#nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 10, 11, 0.98);
+  backdrop-filter: blur(24px);
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#nav-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
+}
+.nav-overlay-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 20px;
+}
+.nav-huge-link {
+  font-size: clamp(28px, 4.5vw, 64px);
+  color: var(--mid);
+  text-decoration: none;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+}
+.nav-huge-link:hover {
+  color: var(--ink);
+  transform: translateX(16px);
+}
+.nav-link-num {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.2vw, 18px);
+  color: var(--mid);
+  letter-spacing: 0.05em;
+}
+
+#toast-notification {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 100000;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform: translateY(-80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+#toast-notification.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+  </style>
+</head>
+<body>
+
+<!-- === VERBATIM MARKUP FROM SECTION 10 === -->
+<div id="track">
+  <main class="stage" id="stage">
+    <!-- Ambient Cinematic Hero Background (Active Before Scroll) -->
+    <div id="hero-bg-wrap">
+      <video id="hero-bg-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous">
+        <source src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/space-voyage-video.mp4" type="video/mp4">
+      </video>
+      <div id="hero-bg-overlay"></div>
+    </div>
+
+    <!-- Animated Scroll Cue Indicator -->
+    <div id="hero-scroll-cue">
+      <div class="scroll-cue-mouse"><div class="scroll-cue-wheel"></div></div>
+      <div class="scroll-cue-text">SCROLL TO IGNITE 3D RIBBON</div>
+    </div>
+
+    <!-- Ambient Background Theme Switcher -->
+    <div id="hero-bg-selector">
+      <span class="bg-sel-label">AMBIENT BG:</span>
+      <button class="bg-sel-btn active" data-src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/space-voyage-video.mp4">COSMOS</button>
+      <button class="bg-sel-btn" data-src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/oraciteslArea.mp4">PARTICLES</button>
+      <button class="bg-sel-btn" data-src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/roadster-3d-car-landing.mp4">HYPERCAR</button>
+      <button class="bg-sel-btn" data-src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/living-portrait-hero.mp4">NEURAL</button>
+    </div>
+
+    <h1 aria-label="Craft in motion">
+      <div class="hl" id="l1" aria-hidden="true"><span>CRAFT IN</span></div>
+      <div class="hl" id="l2" aria-hidden="true"><span>MOTION</span></div>
+    </h1>
+    <div id="cap">Exploring ideas through daily design practice.</div>
+    <div id="glow"></div>
+    <div id="cross"><i>+</i></div>
+    <div id="rule"></div>
+    <canvas id="gl"></canvas>
+    <div id="hint">START A PROJECT &nbsp;→</div>
+    <header class="top">
+      <div class="logo"><svg viewBox="0 0 22 18"><path d="M11 0l11 18h-6.200L11 9.600 6.200 18H0z"/></svg>VANTE</div>
+      <div id="pager"><span>←</span><span>→</span></div>
+      <nav class="acts"><a href="#"><i></i>LET'S TALK</a><a href="#">MENU<b></b></a></nav>
+    </header>
+    <footer class="bot">
+      <p>Concepts, explorations and interface experiments shared openly as part of our creative process.</p>
+      <div class="mid">VISUALS<s>/</s>FILM<s>/</s>MUSIC<s>/</s>EXPERIMENTS</div>
+      <div class="r">VIEW SHOWREEL</div>
+    </footer>
+    <div id="name"></div>
+  </main>
+</div>
+
+<!-- === FLOATING AMBIENT AUDIO & NAVIGATION CONTROLLER === -->
+<div id="floating-nav">
+  <button class="audio-btn" id="audio-toggle-btn" title="Toggle Generative Web Audio Ambient Drone">
+    <span class="audio-bars">
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+    </span>
+    <span id="audio-label">AUDIO: OFF</span>
+  </button>
+  <button class="scroll-top-btn" id="scroll-top-btn" title="Return to Hero Apex">APEX ↑</button>
+</div>
+
+<!-- === POST-HERO COMPREHENSIVE STUDIO EXPERIENCE === -->
+<div id="site-content">
+
+  <!-- Sticky Quick Navigation Bar -->
+  <nav id="quick-nav-bar">
+    <div class="quick-links">
+      <a href="#products-section">01 / PRODUCTS</a>
+      <a href="#workbench-section">02 / 3D WORKBENCH</a>
+      <a href="#manifesto-section">03 / MANIFESTO & SYNTH</a>
+      <a href="#experiments-section">04 / LAB SHADERS</a>
+      <a href="#calculator-section">05 / SCOPE ESTIMATOR</a>
+      <a href="#terminal-section">06 / DISPATCH TERMINAL</a>
+      <a href="#awards-section">07 / RECOGNITION</a>
+    </div>
+    <div class="live-status-pill">
+      <span class="pulse-dot"></span>
+      <span>STUDIO ACTIVE &bull; 8 SYSTEMS ONLINE</span>
+    </div>
+  </nav>
+
+  <!-- 1. FEATURED INDUSTRIAL & SPATIAL PRODUCTS CATALOG -->
+  <section class="section-container" id="products-section">
+    <div class="section-header">
+      <div class="section-tag">SYSTEM ARCHITECTURE // HARDWARE & SPATIAL INVENTIONS</div>
+      <h2 class="section-title">Physical instruments, neural controllers, and optical engines.</h2>
+      <p class="section-desc">Every piece is conceived, prototyped, and stress-tested inside our Zurich & San Francisco ateliers—bridging generative computation with tactile industrial precision.</p>
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="filter-bar" id="category-filter-bar">
+      <button class="filter-btn active" data-filter="all">ALL SYSTEMS (8)</button>
+      <button class="filter-btn" data-filter="spatial">SPATIAL COMPUTING (3)</button>
+      <button class="filter-btn" data-filter="neural">NEURAL INTERFACES (2)</button>
+      <button class="filter-btn" data-filter="hardware">KINETIC HARDWARE (2)</button>
+      <button class="filter-btn" data-filter="autonomous">AUTONOMOUS CRAFT (1)</button>
+    </div>
+
+    <!-- 8 High-End Product Cards with 3D Tilt -->
+    <div class="products-grid" id="products-grid">
+
+      <!-- Product 1 -->
+      <article class="product-card" data-category="neural" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/roadster-3d-car-landing.mp4" muted loop playsinline></video>
+          <div class="product-badge">LIMITED BATCH // 64 UNITS</div>
+          <div class="product-id">PRD.001</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Neural Interfaces</div>
+          <h3 class="product-title">Aero-01 Synaptic Deck</h3>
+          <p class="product-text">Solid-state titanium haptic interface designed for spatial 3D sculpting with 120Hz piezo force-feedback and zero-latency wireless optical synchronization.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Weight</span><span class="spec-val">310g</span></div>
+            <div class="spec-item"><span class="spec-label">Frequency</span><span class="spec-val">4.8 GHz</span></div>
+            <div class="spec-item"><span class="spec-label">Haptic Matrix</span><span class="spec-val">120-Point Piezo</span></div>
+            <div class="spec-item"><span class="spec-label">Latency</span><span class="spec-val">0.4 ms</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Aero-01 Synaptic Deck')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Roadster 3D')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 2 -->
+      <article class="product-card" data-category="hardware" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/living-portrait-hero.mp4" muted loop playsinline></video>
+          <div class="product-badge">BESPOKE COMMISSION</div>
+          <div class="product-id">PRD.002</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Kinetic Hardware</div>
+          <h3 class="product-title">Vante Kroma Chronograph</h3>
+          <p class="product-text">Grade-5 titanium monocoque digital timepiece featuring a tri-axial mechanical balance wheel synced continuously to global atomic cesium time protocols.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Chassis</span><span class="spec-val">Ti-6Al-4V</span></div>
+            <div class="spec-item"><span class="spec-label">Water Resist</span><span class="spec-val">200m Deep</span></div>
+            <div class="spec-item"><span class="spec-label">Power Reserve</span><span class="spec-val">96 Hours</span></div>
+            <div class="spec-item"><span class="spec-label">Crystal</span><span class="spec-val">Dual AR Sapphire</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Vante Kroma Chronograph')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Living Portrait')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 3 -->
+      <article class="product-card" data-category="autonomous" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/roadster-3d-car-landing.mp4" muted loop playsinline></video>
+          <div class="product-badge">ROAD VALIDATION RUN</div>
+          <div class="product-id">PRD.003</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Autonomous Craft</div>
+          <h3 class="product-title">Helion Horizon GT-9</h3>
+          <p class="product-text">All-electric autonomous hypercraft with active carbon morphing surfaces and 800V silicon-carbide torque vectoring architecture engineered for aerodynamic supremacy.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">0-100 km/h</span><span class="spec-val">1.84 sec</span></div>
+            <div class="spec-item"><span class="spec-label">Drag Coeff</span><span class="spec-val">0.198 Cd</span></div>
+            <div class="spec-item"><span class="spec-label">Top Speed</span><span class="spec-val">412 km/h</span></div>
+            <div class="spec-item"><span class="spec-label">Range</span><span class="spec-val">720 km</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Helion Horizon GT-9')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Roadster 3D')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 4 -->
+      <article class="product-card" data-category="hardware" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/medusa-jellyfish-hero.mp4" muted loop playsinline></video>
+          <div class="product-badge">DEPLOYED // MARIANA</div>
+          <div class="product-id">PRD.004</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Kinetic Hardware</div>
+          <h3 class="product-title">Medusa-X Swarm Probe</h3>
+          <p class="product-text">Biomimetic soft-robotic exploratory probe engineered with synthetic silicone myofibrils for zero-turbulence abyssal marine cartography and deep oceanic surveys.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Depth Rating</span><span class="spec-val">11,000m</span></div>
+            <div class="spec-item"><span class="spec-label">Propulsion</span><span class="spec-val">Fluidic Undulation</span></div>
+            <div class="spec-item"><span class="spec-label">Acoustics</span><span class="spec-val">0 dB Noise</span></div>
+            <div class="spec-item"><span class="spec-label">Payload</span><span class="spec-val">Multispectral Lidar</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Medusa-X Swarm Probe')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Robot Jellyfish')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 5 -->
+      <article class="product-card" data-category="neural" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/oraciteslArea.mp4" muted loop playsinline></video>
+          <div class="product-badge">COHERENCE: 99.8%</div>
+          <div class="product-id">PRD.005</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Neural Interfaces</div>
+          <h3 class="product-title">Oracite Neural Core</h3>
+          <p class="product-text">Cryogenically stabilized synthetic quartz lattice hosting 1,024 optical qubits for real-time neural sensory interpolation and point-cloud volumetric rendering.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Qubits</span><span class="spec-val">1,024 Optical</span></div>
+            <div class="spec-item"><span class="spec-label">Cryo Temp</span><span class="spec-val">4.2 Kelvin</span></div>
+            <div class="spec-item"><span class="spec-label">Interconnect</span><span class="spec-val">Photonic Bus</span></div>
+            <div class="spec-item"><span class="spec-label">Substrate</span><span class="spec-val">Synthetic Silica</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Oracite Neural Core')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Particle Self')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 6 -->
+      <article class="product-card" data-category="spatial" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/space-voyage-video.mp4" muted loop playsinline></video>
+          <div class="product-badge">DEVELOPER EDITION</div>
+          <div class="product-id">PRD.006</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Spatial Computing</div>
+          <h3 class="product-title">Prism Spatial Visor</h3>
+          <p class="product-text">Direct retinal projection optics delivering 14K combined resolution with sub-millimeter gaze tracking and ambient photonic passthrough for true spatial immersion.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Field of View</span><span class="spec-val">135° Horizontal</span></div>
+            <div class="spec-item"><span class="spec-label">Display Panel</span><span class="spec-val">Dual 7K Micro-OLED</span></div>
+            <div class="spec-item"><span class="spec-label">Weight</span><span class="spec-val">142g Bare</span></div>
+            <div class="spec-item"><span class="spec-label">Refresh Rate</span><span class="spec-val">144 Hz Locked</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Prism Spatial Visor')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Space Voyage')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 7 -->
+      <article class="product-card" data-category="spatial" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/ink-reveal-hover.mp4" muted loop playsinline></video>
+          <div class="product-badge">STUDIO REFERENCE</div>
+          <div class="product-id">PRD.007</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Spatial Computing</div>
+          <h3 class="product-title">Aether Resonance Monolith</h3>
+          <p class="product-text">Sculpted monolithic acoustic radiator using 16 ultra-pure beryllium dome transducers with holographic wavefield synthesis for pinpoint spatial audio localization.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Frequency Band</span><span class="spec-val">14Hz - 48kHz</span></div>
+            <div class="spec-item"><span class="spec-label">Amplification</span><span class="spec-val">2,400W RMS Class-D</span></div>
+            <div class="spec-item"><span class="spec-label">Enclosure</span><span class="spec-val">Billet 6061-T6</span></div>
+            <div class="spec-item"><span class="spec-label">Total Mass</span><span class="spec-val">48 kg</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Aether Resonance Monolith')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Ink Reveal')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 8 -->
+      <article class="product-card" data-category="spatial" data-tilt>
+        <div class="product-media">
+          <video src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/honey-bee-melli-landing.mp4" muted loop playsinline></video>
+          <div class="product-badge">CLINICAL STAGE II</div>
+          <div class="product-id">PRD.008</div>
+        </div>
+        <div class="product-body">
+          <div class="product-category">Spatial Computing</div>
+          <h3 class="product-title">Voxel Cybernetic Lens</h3>
+          <p class="product-text">Scleral smart lens embedded with micro-LED pixel array and wireless RF ambient power harvest loop for seamless, invisible retinal augmented navigation overlays.</p>
+          <div class="product-specs">
+            <div class="spec-item"><span class="spec-label">Pixel Pitch</span><span class="spec-val">1.8 micron</span></div>
+            <div class="spec-item"><span class="spec-label">Power Harvest</span><span class="spec-val">Ambient RF / NFC</span></div>
+            <div class="spec-item"><span class="spec-label">Biometrics</span><span class="spec-val">Intraocular Pressure</span></div>
+            <div class="spec-item"><span class="spec-label">Permeability</span><span class="spec-val">140 Dk/t (Oxygen)</span></div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-primary" onclick="openProductInspector('Voxel Cybernetic Lens')">360° INSPECT</button>
+            <button class="btn-secondary" onclick="openCaseStudy('Honey Bee')">CASE STUDY</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 2. INTERACTIVE 3D BLUEPRINT WORKBENCH -->
+  <section class="section-container" id="workbench-section">
+    <div class="section-header">
+      <div class="section-tag">HARDWARE TELEMETRY // REAL-TIME 3D WORKBENCH</div>
+      <h2 class="section-title">Deconstructed internal architecture in real-time space.</h2>
+      <p class="section-desc">Rotate the assembly, explode internal sub-layers, and examine thermal, piezoelectric, and quantum coherence telemetry directly on our CAD canvas.</p>
+    </div>
+
+    <div class="workbench-wrap">
+      <div class="workbench-viewport" id="workbench-viewport">
+        <canvas id="workbench-canvas"></canvas>
+        <div class="viewport-hint">DRAG TO ORBIT 360° &bull; SCROLL TO EXPLODE</div>
+      </div>
+
+      <div class="workbench-panel">
+        <div>
+          <div class="panel-block-title">
+            <span>Exploded View Layer Offset</span>
+            <span id="exploded-val-display">0%</span>
+          </div>
+          <input type="range" class="range-slider" id="exploded-slider" min="0" max="100" value="0">
+        </div>
+
+        <div>
+          <div class="panel-block-title">
+            <span>Rotation Velocity</span>
+            <span id="speed-val-display">1.0x</span>
+          </div>
+          <input type="range" class="range-slider" id="speed-slider" min="0" max="30" value="10">
+        </div>
+
+        <div>
+          <div class="panel-block-title">Tactile Finish & Material</div>
+          <div class="finish-swatches">
+            <button class="swatch-btn active" data-finish="obsidian" style="background: #111113;">OBSIDIAN</button>
+            <button class="swatch-btn" data-finish="titanium" style="background: #73737a;">TITANIUM</button>
+            <button class="swatch-btn" data-finish="quartz" style="background: #d8e5e8; color: #000;">QUARTZ</button>
+            <button class="swatch-btn" data-finish="bronze" style="background: #96673d;">BRONZE</button>
+          </div>
+        </div>
+
+        <div class="telemetry-readout">
+          <div class="panel-block-title" style="margin-bottom: 6px;">Live Chassis Telemetry</div>
+          <div class="telemetry-row"><span>COHERENCE RATIO</span><span id="tel-coherence">99.84%</span></div>
+          <div class="telemetry-row"><span>CORE TEMPERATURE</span><span id="tel-temp">34.2° C</span></div>
+          <div class="telemetry-row"><span>PIEZO RESPONSE</span><span id="tel-piezo">4.82 GHz</span></div>
+          <div class="telemetry-row"><span>STRUCTURAL STRESS</span><span id="tel-stress">0.014 MPa</span></div>
+        </div>
+
+        <button class="btn-primary" onclick="triggerWorkbenchCycle()">CYCLE SCHEMATIC NODES</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. STUDIO MANIFESTO & AMBIENT AUDIO SYNTHESIZER -->
+  <section class="section-container" id="manifesto-section">
+    <div class="manifesto-box">
+      <div>
+        <div class="section-tag">THE CRAFT PRINCIPLE</div>
+        <blockquote class="manifesto-quote">
+          “We reject the flatness of screens. We treat <em>pixels as tangible matter</em>, light as sculpted substance, and motion as an architectural continuum.”
+        </blockquote>
+      </div>
+
+      <div class="synth-box">
+        <div class="synth-header">
+          <span>WEB AUDIO HARMONIC GENERATOR</span>
+          <span id="synth-hz-display">110.0 Hz // LPF: 420 Hz</span>
+        </div>
+        <canvas id="synth-canvas"></canvas>
+        <div class="synth-pad" id="synth-pad" title="Move cursor inside pad to modulate cutoff frequency and resonance">
+          <div class="pad-puck" id="synth-puck" style="left: 50%; top: 50%;"></div>
+          <span>DRAG TO SHAPE HARMONIC FILTER</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. EXPERIMENTAL LAB & SHADERS -->
+  <section class="section-container" id="experiments-section">
+    <div class="section-header">
+      <div class="section-tag">VANTE LAB // REAL-TIME RESEARCH & SHADERS</div>
+      <h2 class="section-title">Algorithmic probes & mathematical geometry.</h2>
+      <p class="section-desc">Raw compute experiments built to push GPU vertex throughput, raymarching precision, and non-Euclidean manifold transformations.</p>
+    </div>
+
+    <div class="experiments-grid">
+      <div class="exp-card">
+        <div class="exp-num">EXP.001 // SHADER</div>
+        <div class="exp-name">GLSL Raymarched Signed Distance Fields</div>
+        <p class="product-text">Smooth minimum polynomial blending between morphing algebraic primitive hulls at 120 FPS.</p>
+        <button class="btn-code" onclick="showShaderCode('EXP.001: SDF Raymarching', 'float smin(float a, float b, float k) {\n  float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);\n  return mix(b, a, h) - k * h * (1.0 - h);\n}')">VIEW GLSL SOURCE</button>
+        <div class="exp-meta"><span>FPS: 60.0 LOCKED</span><span>GPU MEM: 12MB</span></div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">EXP.002 // COMPUTE</div>
+        <div class="exp-name">Hyper-Dimensional Particle Flocking</div>
+        <p class="product-text">Spatial compute shader simulating 2,400,000 particulate attractors adhering to gravitational curl fields.</p>
+        <button class="btn-code" onclick="showShaderCode('EXP.002: Particle Compute', 'vec3 computeCurl(vec3 p) {\n  const float e = 0.001;\n  vec3 dx = vec3(e, 0.0, 0.0), dy = vec3(0.0, e, 0.0), dz = vec3(0.0, 0.0, e);\n  return vec3(noise(p+dy).z - noise(p-dy).z - noise(p+dz).y + noise(p-dz).y, ...);\n}')">VIEW GLSL SOURCE</button>
+        <div class="exp-meta"><span>PARTICLES: 2.4M</span><span>ACCEL: WEBGPU</span></div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">EXP.003 // FLUIDS</div>
+        <div class="exp-name">Navier-Stokes Eulerian Ink Dispersion</div>
+        <p class="product-text">High-viscosity pigment simulation with conjugate gradient pressure Poisson solver across a 512x512 mac grid.</p>
+        <button class="btn-code" onclick="showShaderCode('EXP.003: Fluid Solver', 'void solvePressure() {\n  float p = (pL + pR + pB + pT - divergence) * 0.25;\n  pressure = p;\n}')">VIEW GLSL SOURCE</button>
+        <div class="exp-meta"><span>GRID: 512x512</span><span>SOLVER: CG</span></div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-num">EXP.004 // OPTICS</div>
+        <div class="exp-name">Chromatic Dispersion Caustic Lens</div>
+        <p class="product-text">Spectral dispersion prism shader tracing wavelength-dependent refraction through dual convex crystalline glass.</p>
+        <button class="btn-code" onclick="showShaderCode('EXP.004: Dispersion Caustics', 'vec3 refractChromatic(vec3 I, vec3 N, float etaBase) {\n  float etaR = etaBase - 0.015;\n  float etaG = etaBase;\n  float etaB = etaBase + 0.015;\n  return vec3(refract(I, N, etaR).r, refract(I, N, etaG).g, refract(I, N, etaB).b);\n}')">VIEW GLSL SOURCE</button>
+        <div class="exp-meta"><span>INDEX: 1.5168</span><span>PASSES: 3</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. INTERACTIVE PROJECT SCOPE & BUDGET CALCULATOR -->
+  <section class="section-container" id="calculator-section">
+    <div class="section-header">
+      <div class="section-tag">PROJECT ESTIMATION // INTERACTIVE SCOPE CONFIGURATOR</div>
+      <h2 class="section-title">Calculate your project architecture & investment.</h2>
+      <p class="section-desc">Select engineering requirements, specify timeline bounds, and obtain an instant transparent breakdown before dispatching your transmission.</p>
+    </div>
+
+    <div class="calculator-box">
+      <div class="calc-left">
+        <div class="calc-field-group">
+          <div class="calc-label">1. Select Required Capabilities</div>
+          <div class="calc-checkboxes">
+            <label class="calc-check-item selected">
+              <input type="checkbox" value="35000" checked onchange="updateCalc()">
+              <span class="check-name">Spatial Hardware & Industrial ID</span>
+              <span class="check-price">+$35,000</span>
+            </label>
+            <label class="calc-check-item selected">
+              <input type="checkbox" value="28000" checked onchange="updateCalc()">
+              <span class="check-name">Custom 3D WebGL / Shader Experience</span>
+              <span class="check-price">+$28,000</span>
+            </label>
+            <label class="calc-check-item">
+              <input type="checkbox" value="16000" onchange="updateCalc()">
+              <span class="check-name">Kinetic Design System & Motion Framework</span>
+              <span class="check-price">+$16,000</span>
+            </label>
+            <label class="calc-check-item">
+              <input type="checkbox" value="22000" onchange="updateCalc()">
+              <span class="check-name">Neural Haptic & Audio Interface Architecture</span>
+              <span class="check-price">+$22,000</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="calc-field-group">
+          <div class="calc-label">2. Target Delivery Velocity</div>
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--mid);">
+            <span>Sprint (4 wks)</span>
+            <span id="timeline-display" style="color: var(--ink); font-weight: 500;">12 WEEKS</span>
+            <span>Comprehensive (24 wks)</span>
+          </div>
+          <input type="range" class="range-slider" id="calc-timeline-slider" min="4" max="24" value="12" oninput="updateCalc()">
+        </div>
+
+        <div class="calc-field-group">
+          <div class="calc-label">3. Platform Scale Tier</div>
+          <div class="calc-tier-group">
+            <button class="tier-btn active" data-tier="1.0" onclick="setTier(this, 1.0)">PROTOTYPE (1.0x)</button>
+            <button class="tier-btn" data-tier="1.35" onclick="setTier(this, 1.35)">FLAGSHIP (1.35x)</button>
+            <button class="tier-btn" data-tier="1.8" onclick="setTier(this, 1.8)">ENTERPRISE (1.8x)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-summary">
+        <div class="summary-title">ESTIMATED INVESTMENT TELEMETRY</div>
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid); margin-bottom: 8px;">ESTIMATED TOTAL</div>
+          <div class="estimate-amount" id="calc-total-display">$63,000</div>
+        </div>
+
+        <div class="summary-breakdown">
+          <div class="breakdown-row"><span>ALLOCATED CREATIVE DIRECTORS</span><span>1 Principal</span></div>
+          <div class="breakdown-row"><span>SYSTEMS & SHADER ARCHITECTS</span><span>2 Engineers</span></div>
+          <div class="breakdown-row"><span>CAD / HARDWARE SPECIALISTS</span><span>1 Specialist</span></div>
+          <div class="breakdown-row"><span>DELIVERY SPRINT CADENCE</span><span id="breakdown-cadence">Bi-weekly Milestones</span></div>
+        </div>
+
+        <button class="btn-primary" onclick="transferEstimateToBrief()">TRANSFER ESTIMATE TO BRIEF →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. MONOSPACE DISPATCH TERMINAL & INQUIRY -->
+  <section class="section-container" id="terminal-section">
+    <div class="section-header">
+      <div class="section-tag">COMMUNICATIONS // SECURE DISPATCH TERMINAL</div>
+      <h2 class="section-title">Initiate a dialogue with the studio apex.</h2>
+      <p class="section-desc">Transmissions are routed directly into our Zurich engineering review chamber. Typical acknowledgment window: within 24 standard hours.</p>
+    </div>
+
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <div class="terminal-dots">
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+        </div>
+        <span>VANTE-CLI // SESSION-TX-9842</span>
+        <span>ENCRYPTION: AES-256-GCM</span>
+      </div>
+
+      <form class="terminal-content" id="terminal-form" onsubmit="handleTerminalSubmit(event)">
+        <div class="term-line">
+          <label class="term-prompt">&gt; INPUT: CLIENT.IDENTIFIER (Name & Organization)</label>
+          <input type="text" class="term-input" id="input-name" placeholder="e.g. Elena Rostova / Lumina Labs" required>
+        </div>
+
+        <div class="term-line">
+          <label class="term-prompt">&gt; INPUT: TRANSMISSION.CHANNEL (Email Address)</label>
+          <input type="email" class="term-input" id="input-email" placeholder="elena@lumina.ch" required>
+        </div>
+
+        <div class="term-line">
+          <label class="term-prompt">&gt; INPUT: SELECTED.SYSTEM.DOMAINS</label>
+          <input type="text" class="term-input" id="input-scope" value="Spatial Hardware & Industrial ID, 3D WebGL / Shader Experience">
+        </div>
+
+        <div class="term-line">
+          <label class="term-prompt">&gt; INPUT: MISSION.BRIEF &amp; CONTEXT</label>
+          <textarea class="term-input term-textarea" id="input-message" placeholder="Outline your product vision, timeline constraints, and desired kinetic benchmarks..." required></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid);">STATUS: READY FOR ENCRYPTED TRANSMISSION</div>
+          <button type="submit" class="btn-primary" style="padding: 12px 28px;">DISPATCH TRANSMISSION →</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 7. RECOGNITION & PRESS -->
+  <section class="section-container" id="awards-section">
+    <div class="section-header">
+      <div class="section-tag">VALIDATION // GLOBAL JURY CITATIONS</div>
+      <h2 class="section-title">International honors & exhibitions.</h2>
+    </div>
+
+    <table class="awards-table">
+      <thead>
+        <tr>
+          <th>YEAR</th>
+          <th>INSTITUTION</th>
+          <th>HONOR</th>
+          <th>WORK</th>
+          <th>DISCIPLINE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025</td>
+          <td>Awwwards Global</td>
+          <td>Site of the Year</td>
+          <td>Vante Spatial Hero</td>
+          <td>Digital Craft & WebGL</td>
+        </tr>
+        <tr>
+          <td>2025</td>
+          <td>Red Dot International</td>
+          <td>Best of the Best</td>
+          <td>Aero-01 Synaptic Deck</td>
+          <td>Industrial Design</td>
+        </tr>
+        <tr>
+          <td>2024</td>
+          <td>Cannes Lions</td>
+          <td>Gold Lion</td>
+          <td>Helion Horizon GT-9</td>
+          <td>Creative Technology</td>
+        </tr>
+        <tr>
+          <td>2024</td>
+          <td>D&AD International</td>
+          <td>Black Pencil</td>
+          <td>Particle Self</td>
+          <td>Spatial Interaction</td>
+        </tr>
+        <tr>
+          <td>2024</td>
+          <td>FWA of the Day</td>
+          <td>x12 Laurels</td>
+          <td>Vante Research Lab</td>
+          <td>Shader Innovation</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 8. GLOBAL FOOTER WITH REAL-TIME CLOCKS -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-clock-box">
+        <div class="footer-col-title">SAN FRANCISCO (PST)</div>
+        <div class="clock-val" id="clock-sf">--:--:--</div>
+        <div>LAT 37.7749° N &bull; LON 122.4194° W</div>
+      </div>
+      <div class="footer-clock-box">
+        <div class="footer-col-title">LONDON (GMT)</div>
+        <div class="clock-val" id="clock-london">--:--:--</div>
+        <div>LAT 51.5074° N &bull; LON 0.1278° W</div>
+      </div>
+      <div class="footer-clock-box">
+        <div class="footer-col-title">ZURICH HQ (CET)</div>
+        <div class="clock-val" id="clock-zurich">--:--:--</div>
+        <div>LAT 47.3769° N &bull; LON 8.5417° E</div>
+      </div>
+      <div class="footer-clock-box">
+        <div class="footer-col-title">TOKYO (JST)</div>
+        <div class="clock-val" id="clock-tokyo">--:--:--</div>
+        <div>LAT 35.6762° N &bull; LON 139.6503° E</div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 VANTE &bull; CRAFT IN MOTION. ALL RIGHTS RESERVED.</div>
+      <div>VANTE ATELIER SWITZERLAND // SILICON VALLEY</div>
+      <div><a href="#track" style="color: var(--ink); text-decoration: none;">RETURN TO APEX ↑</a></div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- === MODALS === -->
+
+<!-- 1. Case Study Modal -->
+<div class="modal-overlay" id="case-study-modal" onclick="closeModalOnBackdrop(event, this)">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('case-study-modal')">&times;</button>
+    <video class="case-study-hero-video" id="modal-video" controls autoplay muted loop playsinline></video>
+    <div class="modal-content-pad">
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid); letter-spacing: 0.1em; text-transform: uppercase;" id="modal-category">CASE STUDY</div>
+      <h2 style="font-size: clamp(24px, 3.5vw, 42px); font-weight: 500; letter-spacing: -0.03em; margin: 8px 0 16px;" id="modal-title">Roadster 3D</h2>
+      <p style="font-size: 15px; line-height: 1.6; color: var(--mid); margin-bottom: 24px;" id="modal-desc"></p>
+      
+      <div class="product-specs" id="modal-specs"></div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn-primary" onclick="closeModal('case-study-modal'); document.getElementById('terminal-section').scrollIntoView({behavior:'smooth'});">COMMISSION SIMILAR ARCHITECTURE →</button>
+        <button class="btn-secondary" onclick="closeModal('case-study-modal')">CLOSE ARCHIVE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Product 360 Inspector Modal -->
+<div class="modal-overlay" id="product-modal" onclick="closeModalOnBackdrop(event, this)">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal('product-modal')">&times;</button>
+    <div class="modal-content-pad">
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid); letter-spacing: 0.1em;" id="prod-modal-id">PRD.001 // SPECIFICATIONS</div>
+      <h2 style="font-size: 32px; font-weight: 500; margin: 8px 0 20px;" id="prod-modal-title">Product</h2>
+      <p style="color: var(--mid); line-height: 1.6; margin-bottom: 24px;" id="prod-modal-text"></p>
+      
+      <div style="border: 1px solid var(--line); border-radius: 6px; padding: 20px; background: rgba(0,0,0,0.4); margin-bottom: 24px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid); margin-bottom: 12px;">FINISH AVAILABILITY & LEAD TIME</div>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: var(--ink); line-height: 1.6;">
+          &bull; Grade 5 Titanium: In Stock (Dispatches in 48 hours)<br>
+          &bull; Obsidian Carbon: Made to order (3-4 weeks)<br>
+          &bull; Frosted Cryo-Quartz: Limited allocation of 24 pieces<br>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-primary" onclick="closeModal('product-modal'); document.getElementById('terminal-section').scrollIntoView({behavior:'smooth'});">ACQUIRE / INQUIRE ALLOCATION</button>
+        <button class="btn-secondary" onclick="closeModal('product-modal')">RETURN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Showreel Cinema Modal -->
+<div class="modal-overlay" id="showreel-modal" onclick="closeModalOnBackdrop(event, this)">
+  <div class="modal-box" style="max-width: 1100px;">
+    <button class="modal-close-btn" onclick="closeModal('showreel-modal')">&times;</button>
+    <video class="case-study-hero-video" id="showreel-video" controls autoplay playsinline src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/roadster-3d-car-landing.mp4"></video>
+    <div class="modal-content-pad" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--mid);">VANTE ANNUAL CINEMATIC REEL</div>
+        <div style="font-size: 20px; font-weight: 500; color: var(--ink);">Craft in Motion: The Anthology</div>
+      </div>
+      <button class="btn-secondary" onclick="closeModal('showreel-modal')">EXIT CINEMA</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Fullscreen Nav Overlay -->
+<div id="nav-overlay">
+  <div class="nav-overlay-header">
+    <div class="logo"><svg viewBox="0 0 22 18" style="width:22px;height:18px;fill:var(--ink);"><path d="M11 0l11 18h-6.200L11 9.600 6.200 18H0z"/></svg>VANTE APEX</div>
+    <button class="modal-close-btn" style="position:static;" onclick="toggleMenuOverlay(false)">&times;</button>
+  </div>
+  <div class="nav-overlay-body">
+    <a href="#track" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">01</span><span>CRAFT HERO & 3D RIBBON</span></a>
+    <a href="#products-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">02</span><span>HARDWARE & SPATIAL PRODUCTS</span></a>
+    <a href="#workbench-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">03</span><span>3D CAD WORKBENCH</span></a>
+    <a href="#manifesto-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">04</span><span>STUDIO MANIFESTO & SYNTH</span></a>
+    <a href="#experiments-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">05</span><span>EXPERIMENTAL LAB & SHADERS</span></a>
+    <a href="#calculator-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">06</span><span>SCOPE & BUDGET CALCULATOR</span></a>
+    <a href="#terminal-section" class="nav-huge-link" onclick="toggleMenuOverlay(false)"><span class="nav-link-num">07</span><span>DISPATCH TERMINAL & INQUIRY</span></a>
+  </div>
+  <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--mid); border-top: 1px solid var(--line); padding-top: 24px;">
+    <span>ZURICH &bull; SAN FRANCISCO &bull; LONDON &bull; TOKYO</span>
+    <span>VANTE RESEARCH &bull; 2026</span>
+  </div>
+</div>
+
+<!-- Toast Alert -->
+<div id="toast-notification">TRANSMISSION CONFIRMED</div>
+
+<!-- === VERBATIM SCRIPT FROM SECTION 11 === -->
+<script type="module">
+import * as THREE from 'three';
+
+const R2 = 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/';
+const WORK = [
+  ['Roadster 3D', 'designs/roadster-3d-car-landing.mp4'],
+  ['Living Portrait', 'aaaf/living-portrait-hero.mp4'],
+  ['Particle Self', 'aaaf/oraciteslArea.mp4'],
+  ['Robot Jellyfish', 'aaaf/medusa-jellyfish-hero.mp4'],
+  ['Ink Reveal', 'designs/ink-reveal-hover.mp4'],
+  ['Space Voyage', 'designs/space-voyage-video.mp4'],
+  ['Helion Dispatch', 'designs/helion-dispatch-landing.mp4'],
+  ['Honey Bee', 'designs/honey-bee-melli-landing.mp4'],
+];
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const mix = (a, b, t) => a + (b - a) * t;
+const ease = t => t * t * (3 - 2 * t);
+const out = t => 1 - (1 - t) ** 3;
+const span = (p, a, b) => clamp((p - a) / (b - a));
+
+/* ---------- renderer ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setClearColor(0, 0);
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+const scene = new THREE.Scene();
+const FOV = 35, camera = new THREE.PerspectiveCamera(FOV, 1, .1, 100);
+
+/* ---------- ribbon path ---------- */
+let path, PATH_L = 1;
+const SAMPLES = 1200, pathP = [], pathT = [];
+const PH0 = -1.5, PH1 = Math.PI * 2 + 1.35;
+function buildPath() {
+  const pts = [];
+  for (let i = 0; i <= 160; i++) {
+    const t = i / 160, ph = mix(PH0, PH1, t), cs = Math.cos(ph), u = 2 * t - 1;
+    // a shallow arc close to the camera, then long runs far behind it
+    const depth = cs > 0 ? 7.6 + 16.4 * cs ** .9 : 7.6 + 2.2 * cs;
+    const edge = .84 + .5 * span(.14 - t, 0, .14) + .8 * span(t, .84, 1);
+    pts.push(new THREE.Vector3(edge * Math.sin(ph) * depth * .561, .5 * Math.sign(u) * Math.abs(u) ** 1.4 * depth * .63, -depth));
+  }
+  path = new THREE.CatmullRomCurve3(pts, false, 'centripetal');
+  path.arcLengthDivisions = 1500;
+  PATH_L = path.getLength(); pathP.length = pathT.length = 0;
+  for (let i = 0; i <= SAMPLES; i++) { const u = i / SAMPLES; pathP.push(path.getPointAt(u)); pathT.push(path.getTangentAt(u)); }
+}
+const at = (s, op, ot) => {
+  const f = clamp(s / PATH_L) * SAMPLES, i = Math.min(SAMPLES - 1, Math.floor(f)), k = f - i;
+  op.lerpVectors(pathP[i], pathP[i + 1], k); ot.lerpVectors(pathT[i], pathT[i + 1], k).normalize();
+};
+
+/* ---------- cards ---------- */
+const CARD_W = 2.1, CARD_H = 1.32, GAP = .03, STEP = CARD_W + GAP, NX = 28, NY = 3;
+const vs = `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
+const fs = `uniform sampler2D map;uniform vec2 cover;uniform float aspect,ready,radius;varying vec2 vUv;
+void main(){
+  vec2 q=(abs(vUv-.5)-.5)*vec2(aspect,1.)+radius;
+  float d=length(max(q,0.))+min(max(q.x,q.y),0.)-radius;
+  float px=fwidth(d),a=1.-smoothstep(-px,px,d);
+  if(a<.01)discard;
+  vec2 uv=vUv;if(!gl_FrontFacing)uv.x=1.-uv.x;
+  vec3 c=mix(vec3(.075),texture2D(map,(uv-.5)*cover+.5).rgb,ready);
+  float edge=smoothstep(-.012-px,-.012,d);
+  gl_FragColor=vec4(mix(c,vec3(1.),edge*.1),a);
+}`;
+const cards = WORK.map(([title, src], i) => {
+  const v = document.createElement('video');
+  Object.assign(v, {crossOrigin:'anonymous', muted:true, loop:true, playsInline:true, preload:'auto', src:R2 + src});
+  v.setAttribute('playsinline', '');
+  const tex = new THREE.VideoTexture(v);
+  tex.colorSpace = THREE.NoColorSpace; tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = false;
+  const geo = new THREE.PlaneGeometry(1, 1, NX, NY);
+  const mat = new THREE.ShaderMaterial({vertexShader:vs, fragmentShader:fs, transparent:true, side:THREE.DoubleSide,
+    uniforms:{map:{value:tex}, cover:{value:new THREE.Vector2(1, 1)}, aspect:{value:CARD_W / CARD_H}, ready:{value:0}, radius:{value:.018}}});
+  const mesh = new THREE.Mesh(geo, mat); mesh.frustumCulled = false; scene.add(mesh);
+  const c = {i, title, v, tex, geo, mat, mesh, rect:null};
+  v.addEventListener('loadeddata', () => {
+    const va = v.videoWidth / v.videoHeight, ca = CARD_W / CARD_H;
+    mat.uniforms.cover.value.set(va > ca ? ca / va : 1, va > ca ? 1 : va / ca);
+    mat.uniforms.ready.value = 1;
+  });
+  return c;
+});
+
+/* ---------- layout ---------- */
+const GZ = 8;
+let W = 1, H = 1, asp = 1, cols = 3, rows = 2, tanH = .3153;
+function resize() {
+  W = innerWidth; H = innerHeight; asp = W / H;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(W, H, false);
+  camera.aspect = asp; camera.fov = asp < 16 / 9 ? Math.atan(.561 / asp) * 360 / Math.PI : FOV; camera.updateProjectionMatrix();
+  tanH = Math.tan(camera.fov * Math.PI / 360);
+  cols = asp < .9 ? 2 : 3; rows = asp < .9 ? 3 : 2;
+  }
+addEventListener('resize', resize); resize(); buildPath();
+function grid(i) {
+  const vh = 2 * GZ * tanH, vw = vh * asp, gw = vw * (cols === 3 ? .74 : .88), gap = gw * .017;
+  const cw = (gw - gap * (cols - 1)) / cols, ch = cw / (CARD_W / CARD_H), gh = ch * rows + gap * 1.6 * (rows - 1);
+  const c = i % cols, r = Math.floor(i / cols);
+  return {x:-gw / 2 + cw / 2 + c * (cw + gap), y:gh / 2 - ch / 2 - r * (ch + gap * 1.6), w:cw, h:ch, vw, vh, c, r};
+}
+
+/* ---------- scroll ---------- */
+let target = 0, p = 0, frozen = false;
+const readScroll = () => { const t = $('track'); target = clamp(scrollY / (t.offsetHeight - innerHeight)); };
+addEventListener('scroll', readScroll, {passive:true}); readScroll();
+
+/* ---------- pose ---------- */
+const op = new THREE.Vector3(), ot = new THREE.Vector3(), up = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0), vp = new THREE.Vector3();
+function poseRibbon(c, head) {
+  const pos = c.geo.attributes.position, centre = head - c.i * STEP;
+  for (let iy = 0; iy <= NY; iy++) for (let ix = 0; ix <= NX; ix++) {
+    const k = iy * (NX + 1) + ix, lu = ix / NX - .5, lv = .5 - iy / NY;
+    at(centre + lu * CARD_W, op, ot);
+    // keep the sheet upright, leaning a little into the turn
+        up.copy(Y).addScaledVector(ot, -Y.dot(ot)).normalize();
+    vp.copy(op).addScaledVector(up, lv * CARD_H);
+    pos.setXYZ(k, vp.x, vp.y, vp.z);
+  }
+  pos.needsUpdate = true;
+}
+function poseGrid(c, q) {
+  const g = grid(c.i), pos = c.geo.attributes.position;
+  const dx = (g.c - (cols - 1) / 2) * 1.2 + (cols === 3 && g.c === 1 ? 0 : 0), dy = g.r < rows / 2 ? 1 : -1;
+  const ox = dx * g.vw * .62 * (1 - q), oy = dy * g.vh * (g.c === 1 ? .95 : .34) * (1 - q), tilt = (1 - q) * .22 * (g.c - 1 || .5) * dy;
+  const cs = Math.cos(tilt), sn = Math.sin(tilt);
+  for (let iy = 0; iy <= NY; iy++) for (let ix = 0; ix <= NX; ix++) {
+    const k = iy * (NX + 1) + ix, x = (ix / NX - .5) * g.w, y = (.5 - iy / NY) * g.h;
+    pos.setXYZ(k, g.x + ox + x * cs - y * sn, g.y + oy + x * sn + y * cs, -GZ - (1 - q) * .6 * Math.sin(ix / NX * Math.PI));
+  }
+  pos.needsUpdate = true;
+  c.rect = g;
+}
+
+const RIB_A = .14, RIB_B = .63;
+function setVideos(fn) { cards.forEach(c => fn(c)); }
+function render() {
+  const pp = p;
+  // headline runs right across the page in opposite directions
+  const rise = 1 - out(span(pp, 0, .12));
+  const run = mix(-50, 76, span(pp, 0, .58));
+  $('l1').style.transform = `translate3d(${run}vw,${rise * 34}vh,0)`;
+  $('l2').style.transform = `translate3d(${-run}vw,${rise * 34}vh,0)`;
+  const capA = 1 - span(pp, .52, .57);
+  $('cap').style.opacity = capA; $('cap').style.transform = `translate(-50%,calc(-50% + ${rise * 34}vh))`;
+  const intro = 1 - span(pp, 0, .05);
+  for (const id of ['hint', 'pager', 'cross', 'glow']) $(id).style.opacity = intro;
+  $('rule').style.transform = `scaleX(${ease(span(pp, .72, .86))})`;
+  $('rule').style.top = '50%';
+  // ribbon, then the grid
+  const pr = span(pp, RIB_A, RIB_B), head = mix(0, PATH_L + cards.length * STEP, pr);
+  for (const c of cards) {
+    const s = head - c.i * STEP, end = PATH_L - CARD_W;
+    if (s < end) {
+      c.mesh.visible = s > CARD_W; c.rect = null;
+      if (c.mesh.visible) poseRibbon(c, head);
+    } else if (c.i < cols * rows) {
+      // each card flies to its slot the moment it leaves the rail
+      const st = mix(RIB_A, RIB_B, (end + c.i * STEP) / (PATH_L + cards.length * STEP)), q = out(span(pp, st, st + .13));
+      c.mesh.visible = q > .001;
+      if (c.mesh.visible) poseGrid(c, q);
+    } else { c.mesh.visible = false; c.rect = null; }
+  }
+  renderer.render(scene, camera);
+}
+
+/* ---------- hover ---------- */
+const nameEl = $('name');
+$('stage').addEventListener('pointermove', e => {
+  let hit = null;
+  if (p > .86) {
+    const nx = (e.clientX / W - .5), ny = (.5 - e.clientY / H);
+    for (const c of cards) { const g = c.rect; if (!g) continue; const x = nx * g.vw, y = ny * g.vh; if (Math.abs(x - g.x) < g.w / 2 && Math.abs(y - g.y) < g.h / 2) hit = c; }
+  }
+  nameEl.style.opacity = hit ? 1 : 0;
+  if (hit) { nameEl.textContent = hit.title; nameEl.style.transform = `translate(${e.clientX + 14}px,${e.clientY + 16}px)`; }
+});
+
+/* ---------- loop ---------- */
+function loop() {
+  if (!frozen) {
+    p += (target - p) * .09;
+    if (Math.abs(target - p) < .00005) p = target;
+    for (const c of cards) {
+      if (c.mesh.visible && c.v.paused) c.v.play().catch(() => {});
+      else if (!c.mesh.visible && !c.v.paused) c.v.pause();
+    }
+    render();
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+<!-- === EXTENDED INTERACTIVE LOGIC MODULE === -->
+<script>
+const CASE_STUDIES = {
+  'Roadster 3D': {
+    category: 'Autonomous Vehicle Architecture',
+    desc: 'High-performance WebGL 3D vehicle configurator engineered with physical carbon-fiber shaders, active morphing aero winglets, and silicon-carbide motor telemetry.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/roadster-3d-car-landing.mp4',
+    specs: [
+      { label: 'Client', val: 'Helion Automotive Research' },
+      { label: 'Year', val: '2025' },
+      { label: 'Framerate', val: '60 FPS Locked' },
+      { label: 'Payload', val: '1.2 MB Shaders' }
+    ]
+  },
+  'Living Portrait': {
+    category: 'Neural Facial Rigging',
+    desc: 'Audio-reactive synthetic empathy interface that synchronizes subtle ocular saccades and micro-expression dynamics with audio frequencies in real-time.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/living-portrait-hero.mp4',
+    specs: [
+      { label: 'Client', val: 'Neuromorphic Media Lab' },
+      { label: 'Year', val: '2025' },
+      { label: 'Latency', val: '16ms Response' },
+      { label: 'Resolution', val: '4K Micro-Mesh' }
+    ]
+  },
+  'Particle Self': {
+    category: 'Spatial Point Cloud Simulation',
+    desc: 'Biometric volumetric point cloud reacting dynamically to user presence and gravitational vector fields through compute-shader particle physics.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/oraciteslArea.mp4',
+    specs: [
+      { label: 'Client', val: 'Spatial Computing Zurich' },
+      { label: 'Year', val: '2024' },
+      { label: 'Particles', val: '2.4 Million' },
+      { label: 'Pipeline', val: 'WebGPU Compute' }
+    ]
+  },
+  'Robot Jellyfish': {
+    category: 'Biomimetic Deep-Sea Swarm',
+    desc: 'Fluid dynamic simulation of soft-robotic underwater exploration vessels equipped with bioluminescent optical communication sensors for trench charting.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/aaaf/medusa-jellyfish-hero.mp4',
+    specs: [
+      { label: 'Client', val: 'Oceanic Autonomous Systems' },
+      { label: 'Year', val: '2025' },
+      { label: 'Depth Rating', val: '11,000 Meters' },
+      { label: 'Acoustics', val: '0 dB Silent Swarm' }
+    ]
+  },
+  'Ink Reveal': {
+    category: 'Navier-Stokes Micro-Fluidics',
+    desc: 'Computational fluid dynamic simulation of high-viscosity typographic pigment diffusion in colloidal liquid medium, running on a 512x512 grid.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/ink-reveal-hover.mp4',
+    specs: [
+      { label: 'Client', val: 'Vante Editorial Atelier' },
+      { label: 'Year', val: '2024' },
+      { label: 'Solver', val: 'Conjugate Gradient' },
+      { label: 'Viscosity', val: '0.048 Pa.s' }
+    ]
+  },
+  'Space Voyage': {
+    category: 'Relativistic Spacetime Lensing',
+    desc: 'General relativistic raymarching through curved gravitational spacetime manifolds, rendering authentic photon spheres and Doppler color shifts.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/space-voyage-video.mp4',
+    specs: [
+      { label: 'Client', val: 'Deep Space Observatory' },
+      { label: 'Year', val: '2025' },
+      { label: 'Metric', val: 'Kerr Black Hole' },
+      { label: 'Geodesics', val: 'Runge-Kutta 4' }
+    ]
+  },
+  'Helion Dispatch': {
+    category: 'Aerospace Flight Telemetry',
+    desc: 'High-density mission control HUD and 3D sub-orbital glider vector tracking system designed for mission logistics and real-time flight telemetry.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/helion-dispatch-landing.mp4',
+    specs: [
+      { label: 'Client', val: 'Helion Aerospace' },
+      { label: 'Year', val: '2024' },
+      { label: 'Concurrency', val: '100k Sensors' },
+      { label: 'Telemetry Sync', val: '50ms Latency' }
+    ]
+  },
+  'Honey Bee': {
+    category: 'Micro-Robotic Bio-Pollinator',
+    desc: 'Micron-scale autonomous pollination robotic system with optical compound eye sensors, carbon-fiber wing hinges, and wireless telemetry.',
+    video: 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/designs/honey-bee-melli-landing.mp4',
+    specs: [
+      { label: 'Client', val: 'AgriTech Ecological Systems' },
+      { label: 'Year', val: '2025' },
+      { label: 'Frequency', val: '220 Wing Beats/s' },
+      { label: 'Mass', val: '82 mg' }
+    ]
+  }
+};
+
+function openCaseStudy(title) {
+  const data = CASE_STUDIES[title] || CASE_STUDIES['Roadster 3D'];
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-category').textContent = data.category;
+  document.getElementById('modal-desc').textContent = data.desc;
+  
+  const videoEl = document.getElementById('modal-video');
+  videoEl.src = data.video;
+  videoEl.play().catch(() => {});
+
+  const specsEl = document.getElementById('modal-specs');
+  specsEl.innerHTML = data.specs.map(s => `
+    <div class="spec-item">
+      <span class="spec-label">${s.label}</span>
+      <span class="spec-val">${s.val}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('case-study-modal').classList.add('active');
+  playClickSound();
+}
+
+function openProductInspector(title) {
+  document.getElementById('prod-modal-title').textContent = title;
+  document.getElementById('prod-modal-text').textContent = `Full 360° engineering blueprint and material matrix for ${title}. Tested under extreme thermal and mechanical vibrational stress.`;
+  document.getElementById('product-modal').classList.add('active');
+  playClickSound();
+}
+
+function openShowreelModal() {
+  const modal = document.getElementById('showreel-modal');
+  modal.classList.add('active');
+  const vid = document.getElementById('showreel-video');
+  vid.currentTime = 0;
+  vid.play().catch(() => {});
+  playClickSound();
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.remove('active');
+  const v = modal.querySelector('video');
+  if (v) v.pause();
+  playClickSound();
+}
+
+function closeModalOnBackdrop(e, modal) {
+  if (e.target === modal) {
+    modal.classList.remove('active');
+    const v = modal.querySelector('video');
+    if (v) v.pause();
+  }
+}
+
+function toggleMenuOverlay(open) {
+  const overlay = document.getElementById('nav-overlay');
+  if (open) {
+    overlay.classList.add('active');
+  } else {
+    overlay.classList.remove('active');
+  }
+  playClickSound();
+}
+
+function showShaderCode(title, code) {
+  alert(`${title}\n\n${code}`);
+}
+
+const stageEl = document.getElementById('stage');
+const nameEl = document.getElementById('name');
+stageEl.addEventListener('click', () => {
+  if (nameEl && nameEl.style.opacity === '1' && nameEl.textContent) {
+    openCaseStudy(nameEl.textContent);
+  }
+});
+
+const hintBtn = document.getElementById('hint');
+if (hintBtn) {
+  hintBtn.style.cursor = 'pointer';
+  hintBtn.addEventListener('click', () => {
+    document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+const pagerSpans = document.getElementById('pager').querySelectorAll('span');
+if (pagerSpans.length >= 2) {
+  pagerSpans[0].style.cursor = 'pointer';
+  pagerSpans[0].addEventListener('click', () => {
+    const track = document.getElementById('track');
+    window.scrollBy({ top: -track.offsetHeight * 0.25, behavior: 'smooth' });
+    playClickSound();
+  });
+  pagerSpans[1].style.cursor = 'pointer';
+  pagerSpans[1].addEventListener('click', () => {
+    const track = document.getElementById('track');
+    window.scrollBy({ top: track.offsetHeight * 0.25, behavior: 'smooth' });
+    playClickSound();
+  });
+}
+
+const actsLinks = document.querySelectorAll('.acts a');
+if (actsLinks[0]) {
+  actsLinks[0].addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('terminal-section').scrollIntoView({ behavior: 'smooth' });
+    playClickSound();
+  });
+}
+if (actsLinks[1]) {
+  actsLinks[1].addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleMenuOverlay(true);
+  });
+}
+
+const showreelBtn = document.querySelector('.bot .r');
+if (showreelBtn) {
+  showreelBtn.style.cursor = 'pointer';
+  showreelBtn.addEventListener('click', () => {
+    openShowreelModal();
+  });
+}
+
+const filterBtns = document.querySelectorAll('.filter-btn');
+const productCards = document.querySelectorAll('.product-card');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    productCards.forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    playClickSound();
+  });
+});
+
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const rotX = -(y / (rect.height / 2)) * 8;
+    const rotY = (x / (rect.width / 2)) * 8;
+    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  });
+});
+
+let audioCtx = null;
+let osc1, osc2, osc3, filterNode, gainNode, analyser;
+let isAudioActive = false;
+
+function initAudio() {
+  if (audioCtx) return;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AudioContext();
+
+  gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+  filterNode = audioCtx.createBiquadFilter();
+  filterNode.type = 'lowpass';
+  filterNode.frequency.setValueAtTime(420, audioCtx.currentTime);
+  filterNode.Q.setValueAtTime(3.5, audioCtx.currentTime);
+
+  osc1 = audioCtx.createOscillator();
+  osc1.type = 'sine';
+  osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+
+  osc2 = audioCtx.createOscillator();
+  osc2.type = 'triangle';
+  osc2.frequency.setValueAtTime(110.2, audioCtx.currentTime);
+
+  osc3 = audioCtx.createOscillator();
+  osc3.type = 'sine';
+  osc3.frequency.setValueAtTime(165.0, audioCtx.currentTime);
+
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+
+  osc1.connect(filterNode);
+  osc2.connect(filterNode);
+  osc3.connect(filterNode);
+  filterNode.connect(gainNode);
+  gainNode.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  osc1.start();
+  osc2.start();
+  osc3.start();
+}
+
+function toggleAudio() {
+  initAudio();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  isAudioActive = !isAudioActive;
+  
+  const label = document.getElementById('audio-label');
+  const btn = document.getElementById('audio-toggle-btn');
+  
+  if (isAudioActive) {
+    gainNode.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.4);
+    btn.classList.add('audio-active');
+    label.textContent = 'AUDIO: ENGAGED';
+    showToast('AMBIENT SYNTHESIZER FREQUENCY ENGAGED');
+  } else {
+    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.4);
+    btn.classList.remove('audio-active');
+    label.textContent = 'AUDIO: OFF';
+    showToast('AMBIENT FREQUENCY MUTED');
+  }
+}
+
+document.getElementById('audio-toggle-btn').addEventListener('click', toggleAudio);
+
+function playClickSound() {
+  if (!isAudioActive || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.05);
+  g.gain.setValueAtTime(0.04, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  osc.connect(g);
+  g.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+
+const synthPad = document.getElementById('synth-pad');
+const synthPuck = document.getElementById('synth-puck');
+const synthHzDisplay = document.getElementById('synth-hz-display');
+synthPad.addEventListener('pointermove', e => {
+  const rect = synthPad.getBoundingClientRect();
+  const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+  synthPuck.style.left = `${x * 100}%`;
+  synthPuck.style.top = `${y * 100}%`;
+
+  const cutoff = 100 + x * 2400;
+  const res = 1 + (1 - y) * 12;
+  if (filterNode && isAudioActive) {
+    filterNode.frequency.setTargetAtTime(cutoff, audioCtx.currentTime, 0.05);
+    filterNode.Q.setTargetAtTime(res, audioCtx.currentTime, 0.05);
+  }
+  synthHzDisplay.textContent = `${(55 + x * 55).toFixed(1)} Hz // LPF: ${Math.round(cutoff)} Hz (Q:${res.toFixed(1)})`;
+});
+
+const synthCanvas = document.getElementById('synth-canvas');
+const synthCtx = synthCanvas.getContext('2d');
+function drawWaveform() {
+  requestAnimationFrame(drawWaveform);
+  synthCanvas.width = synthCanvas.offsetWidth;
+  synthCanvas.height = synthCanvas.offsetHeight;
+  synthCtx.clearRect(0, 0, synthCanvas.width, synthCanvas.height);
+  
+  synthCtx.lineWidth = 1.5;
+  synthCtx.strokeStyle = isAudioActive ? 'rgba(94, 240, 215, 0.8)' : 'rgba(244, 241, 234, 0.2)';
+  synthCtx.beginPath();
+
+  if (isAudioActive && analyser) {
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(data);
+    const sliceWidth = synthCanvas.width / data.length;
+    let x = 0;
+    for (let i = 0; i < data.length; i++) {
+      const v = data[i] / 128.0;
+      const y = (v * synthCanvas.height) / 2;
+      if (i === 0) synthCtx.moveTo(x, y);
+      else synthCtx.lineTo(x, y);
+      x += sliceWidth;
+    }
+  } else {
+    const t = Date.now() * 0.003;
+    for (let x = 0; x < synthCanvas.width; x++) {
+      const y = synthCanvas.height / 2 + Math.sin(x * 0.04 + t) * 6;
+      if (x === 0) synthCtx.moveTo(x, y);
+      else synthCtx.lineTo(x, y);
+    }
+  }
+  synthCtx.stroke();
+}
+drawWaveform();
+
+const wbCanvas = document.getElementById('workbench-canvas');
+const wbCtx = wbCanvas.getContext('2d');
+let wbAngleX = 0.45;
+let wbAngleY = 0.65;
+let wbSpeed = 0.01;
+let wbExploded = 0;
+let wbFinish = 'obsidian';
+let isDraggingWb = false;
+let lastMouseX = 0, lastMouseY = 0;
+
+const finishColors = {
+  obsidian: { stroke: 'rgba(244, 241, 234, 0.4)', fill: 'rgba(20, 20, 24, 0.85)', glow: 'rgba(94, 240, 215, 0.4)' },
+  titanium: { stroke: 'rgba(244, 241, 234, 0.85)', fill: 'rgba(90, 90, 105, 0.75)', glow: 'rgba(244, 241, 234, 0.6)' },
+  quartz: { stroke: 'rgba(160, 230, 245, 0.9)', fill: 'rgba(210, 240, 250, 0.55)', glow: 'rgba(94, 240, 215, 0.8)' },
+  bronze: { stroke: 'rgba(245, 183, 79, 0.85)', fill: 'rgba(120, 75, 40, 0.75)', glow: 'rgba(245, 183, 79, 0.6)' }
+};
+
+document.getElementById('workbench-viewport').addEventListener('pointerdown', e => {
+  isDraggingWb = true;
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
+});
+window.addEventListener('pointerup', () => isDraggingWb = false);
+window.addEventListener('pointermove', e => {
+  if (!isDraggingWb) return;
+  const dx = e.clientX - lastMouseX;
+  const dy = e.clientY - lastMouseY;
+  wbAngleY += dx * 0.01;
+  wbAngleX += dy * 0.01;
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
+});
+
+document.getElementById('exploded-slider').addEventListener('input', e => {
+  wbExploded = e.target.value / 100;
+  document.getElementById('exploded-val-display').textContent = `${e.target.value}%`;
+});
+document.getElementById('speed-slider').addEventListener('input', e => {
+  wbSpeed = (e.target.value / 1000);
+  document.getElementById('speed-val-display').textContent = `${(e.target.value / 10).toFixed(1)}x`;
+});
+
+document.querySelectorAll('.swatch-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.swatch-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    wbFinish = btn.dataset.finish;
+    playClickSound();
+  });
+});
+
+function projectPoint(x, y, z, cx, cy, fov) {
+  const cosY = Math.cos(wbAngleY), sinY = Math.sin(wbAngleY);
+  const x1 = x * cosY - z * sinY;
+  const z1 = z * cosY + x * sinY;
+
+  const cosX = Math.cos(wbAngleX), sinX = Math.sin(wbAngleX);
+  const y2 = y * cosX - z1 * sinX;
+  const z2 = z1 * cosX + y * sinX;
+
+  const distance = 400;
+  const scale = fov / (distance + z2);
+  return {
+    x: cx + x1 * scale,
+    y: cy + y2 * scale,
+    z: z2,
+    scale
+  };
+}
+
+function renderWorkbench() {
+  requestAnimationFrame(renderWorkbench);
+  wbCanvas.width = wbCanvas.offsetWidth;
+  wbCanvas.height = wbCanvas.offsetHeight;
+  const cx = wbCanvas.width / 2;
+  const cy = wbCanvas.height / 2;
+  const fov = 340;
+
+  if (!isDraggingWb) {
+    wbAngleY += wbSpeed;
+  }
+
+  wbCtx.clearRect(0, 0, wbCanvas.width, wbCanvas.height);
+
+  const colors = finishColors[wbFinish];
+
+  const layers = [
+    { name: 'Layer 5: Base Heatsink & Batteries', zOffset: -120 * wbExploded - 50, w: 180, h: 120, d: 15 },
+    { name: 'Layer 4: CNC Titanium Monocoque', zOffset: -60 * wbExploded - 25, w: 190, h: 125, d: 20 },
+    { name: 'Layer 3: Neural Co-Processor Core', zOffset: 0, w: 150, h: 90, d: 8, isCore: true },
+    { name: 'Layer 2: 120-Point Piezo Matrix', zOffset: 60 * wbExploded + 25, w: 170, h: 110, d: 6 },
+    { name: 'Layer 1: Optical Anti-Reflective Glass', zOffset: 120 * wbExploded + 50, w: 190, h: 125, d: 4, isGlass: true }
+  ];
+
+  layers.forEach((layer, idx) => {
+    const hw = layer.w / 2;
+    const hh = layer.h / 2;
+    const z = layer.zOffset;
+
+    const corners = [
+      projectPoint(-hw, -hh, z, cx, cy, fov),
+      projectPoint(hw, -hh, z, cx, cy, fov),
+      projectPoint(hw, hh, z, cx, cy, fov),
+      projectPoint(-hw, hh, z, cx, cy, fov)
+    ];
+
+    wbCtx.beginPath();
+    wbCtx.moveTo(corners[0].x, corners[0].y);
+    corners.forEach(p => wbCtx.lineTo(p.x, p.y));
+    wbCtx.closePath();
+
+    wbCtx.fillStyle = layer.isCore ? 'rgba(94, 240, 215, 0.25)' : (layer.isGlass ? 'rgba(244, 241, 234, 0.12)' : colors.fill);
+    wbCtx.fill();
+
+    wbCtx.lineWidth = layer.isCore ? 2 : 1;
+    wbCtx.strokeStyle = layer.isCore ? 'rgba(94, 240, 215, 0.8)' : colors.stroke;
+    wbCtx.stroke();
+
+    if (layer.isCore) {
+      for (let i = -40; i <= 40; i += 20) {
+        const p1 = projectPoint(i, -hh * 0.8, z, cx, cy, fov);
+        const p2 = projectPoint(i, hh * 0.8, z, cx, cy, fov);
+        wbCtx.beginPath();
+        wbCtx.moveTo(p1.x, p1.y);
+        wbCtx.lineTo(p2.x, p2.y);
+        wbCtx.strokeStyle = 'rgba(94, 240, 215, 0.3)';
+        wbCtx.stroke();
+      }
+    }
+
+    if (wbExploded > 0.25) {
+      const tagPt = projectPoint(hw + 20, 0, z, cx, cy, fov);
+      wbCtx.font = '10px "IBM Plex Mono", monospace';
+      wbCtx.fillStyle = colors.glow;
+      wbCtx.fillText(`[0${5 - idx}] ${layer.name}`, tagPt.x + 8, tagPt.y + 3);
+      wbCtx.beginPath();
+      wbCtx.moveTo(corners[1].x, corners[1].y);
+      wbCtx.lineTo(tagPt.x + 4, tagPt.y);
+      wbCtx.strokeStyle = 'rgba(244, 241, 234, 0.2)';
+      wbCtx.stroke();
+    }
+  });
+}
+renderWorkbench();
+
+setInterval(() => {
+  const coh = (99.80 + Math.random() * 0.12).toFixed(2);
+  const temp = (34.0 + Math.random() * 0.6).toFixed(1);
+  const pz = (4.80 + Math.random() * 0.05).toFixed(2);
+  document.getElementById('tel-coherence').textContent = `${coh}%`;
+  document.getElementById('tel-temp').textContent = `${temp}° C`;
+  document.getElementById('tel-piezo').textContent = `${pz} GHz`;
+}, 1800);
+
+function triggerWorkbenchCycle() {
+  wbAngleY += Math.PI * 0.5;
+  wbExploded = wbExploded > 0.5 ? 0 : 0.85;
+  document.getElementById('exploded-slider').value = wbExploded * 100;
+  document.getElementById('exploded-val-display').textContent = `${Math.round(wbExploded * 100)}%`;
+  playClickSound();
+}
+
+let selectedTierMultiplier = 1.0;
+function setTier(btn, mult) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedTierMultiplier = mult;
+  updateCalc();
+  playClickSound();
+}
+
+function updateCalc() {
+  const checkboxes = document.querySelectorAll('.calc-check-item input');
+  let baseSum = 0;
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      baseSum += parseInt(cb.value);
+      cb.parentElement.classList.add('selected');
+    } else {
+      cb.parentElement.classList.remove('selected');
+    }
+  });
+
+  const timelineWeeks = parseInt(document.getElementById('calc-timeline-slider').value);
+  document.getElementById('timeline-display').textContent = `${timelineWeeks} WEEKS`;
+
+  const timeFactor = timelineWeeks < 8 ? 1.25 : (timelineWeeks > 16 ? 0.95 : 1.0);
+  const total = Math.round(baseSum * selectedTierMultiplier * timeFactor);
+
+  document.getElementById('calc-total-display').textContent = `$${total.toLocaleString()}`;
+}
+
+function transferEstimateToBrief() {
+  const total = document.getElementById('calc-total-display').textContent;
+  const weeks = document.getElementById('timeline-display').textContent;
+  const scopeItems = Array.from(document.querySelectorAll('.calc-check-item.selected .check-name'))
+    .map(el => el.textContent).join(', ');
+
+  document.getElementById('input-scope').value = scopeItems || 'Custom Full-Stack Studio Scope';
+  document.getElementById('input-message').value = `Target Scope: ${scopeItems}\nEstimated Allocation: ${total} over ${weeks}.\nWe look forward to initiating review.`;
+  
+  document.getElementById('terminal-section').scrollIntoView({ behavior: 'smooth' });
+  showToast('ESTIMATE TRANSFERRED TO DISPATCH TERMINAL');
+  playClickSound();
+}
+
+function handleTerminalSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('input-name').value;
+  const email = document.getElementById('input-email').value;
+  
+  showToast(`TRANSMISSION CONFIRMED &bull; DISPATCHED TO ZURICH ATELIER`);
+  playClickSound();
+  alert(`[ TRANSMISSION DISPATCHED ]\n\nRecipient: Vante Studio Review Chambers (Zurich)\nIdentity: ${name} (${email})\nHandshake: 200 OK — Encrypted Token #VANTE-TX-9842\n\nOur creative director will reach out within 24 hours.`);
+  document.getElementById('terminal-form').reset();
+}
+
+function updateClocks() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  
+  const sfTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+  document.getElementById('clock-sf').textContent = `${pad(sfTime.getHours())}:${pad(sfTime.getMinutes())}:${pad(sfTime.getSeconds())}`;
+
+  const londonTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
+  document.getElementById('clock-london').textContent = `${pad(londonTime.getHours())}:${pad(londonTime.getMinutes())}:${pad(londonTime.getSeconds())}`;
+
+  const zurichTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Zurich" }));
+  document.getElementById('clock-zurich').textContent = `${pad(zurichTime.getHours())}:${pad(zurichTime.getMinutes())}:${pad(zurichTime.getSeconds())}`;
+
+  const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+  document.getElementById('clock-tokyo').textContent = `${pad(tokyoTime.getHours())}:${pad(tokyoTime.getMinutes())}:${pad(tokyoTime.getSeconds())}`;
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+
+function showToast(msg) {
+  const toast = document.getElementById('toast-notification');
+  toast.innerHTML = msg;
+  toast.classList.add('active');
+  setTimeout(() => toast.classList.remove('active'), 3200);
+}
+
+document.getElementById('scroll-top-btn').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+    document.getElementById('nav-overlay').classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>
